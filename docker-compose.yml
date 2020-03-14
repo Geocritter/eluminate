@@ -6,7 +6,7 @@ services:
     image: nginx:alpine
     volumes:
       - ~/back/eLuminate_backend/reverse_proxy.conf:/etc/nginx/conf.d    
-      ports:
+    ports:
       - 80:80
     restart: always
   
