@@ -1,0 +1,23 @@
+.nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: left;
+    max-height: 10vh;
+    background: #e6e6e4;
+    color: #615672;
+}
+
+.nav-picture {
+    padding-right: 90%;
+}
+
+.nav-buttons{
+    padding-top: 2%;
+    text-align: right;
+    width: 20%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #615672;
+    font-size: (10px + 2vmin);
+}

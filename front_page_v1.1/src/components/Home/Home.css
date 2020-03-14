@@ -1,0 +1,39 @@
+.App-header {
+  background-color: #f5f3f3;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2%;
+  font-size: calc(5px + 2vmin);
+  color: rgb(0, 0, 0);
+  font-family: "Rockwell";
+}
+
+.App-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    padding-right: 6%;
+}
+
+.App-sub {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10%;
+    font-size: calc(35px + 2vmin);
+    font-family: "Rockwell-Bold";
+    color: #222228;
+    text-align: center;
+}
+
+.App-body {
+    text-align: center;
+    font-family: 'Rockwell';
+    color: #000000;
+    font-size: calc(10px + 2vmin);
+}
+
+.App-foot {
+    padding-bottom: 40%;
+}

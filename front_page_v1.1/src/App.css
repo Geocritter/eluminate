@@ -1,0 +1,18 @@
+.App-header{
+    background-color: #e6e6e4;
+}
+
+.button{
+    align-items: center;
+    color: #615672;
+}
+
+.Colour-picker {
+    background-color: #e6e6e4;
+}
+
+.footer{
+    min-height: 100%;
+    text-align: center;
+    font-size: small;
+}
