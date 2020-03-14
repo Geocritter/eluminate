@@ -1,13 +1,12 @@
 version: '3.3'
 
 services:
-
   proxy:
-    image: nginx:alpine
-    volumes:
-      - ./proxy:/etc/nginx/conf.d
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
     ports:
-      - 80:80
+      - "80:80"
     restart: always
   
   mongo:
