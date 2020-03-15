@@ -16,14 +16,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: dev
       MONGO_INITDB_ROOT_PASSWORD: dev
-    ports: 
-      - "27017:27017"
     restart: always
 
   mongo-express:
     image: mongo-express:0.54
     environment:
-      ME_CONFIG_SITE_BASEURL: /mongoexpress
+      ME_CONFIG_SITE_BASEURL: /
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: dev
       ME_CONFIG_BASICAUTH_PASSWORD: dev
@@ -31,13 +29,9 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: dev
     depends_on:
       - "mongo"
-    ports:
-      - 8081:8081
 
   static:
     image: nginx:alpine
     volumes:
       - ./front_page_v1.1/build:/usr/share/nginx/html
       - ./static:/etc/nginx/conf.d
-    ports:
-      - 8080:8080
