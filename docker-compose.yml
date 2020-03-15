@@ -5,6 +5,8 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
+    depends_on:
+      - "mongo"
     ports:
       - "80:80"
     restart: always
