@@ -6,7 +6,7 @@ services:
       context: ./proxy
       dockerfile: Dockerfile
     depends_on:
-      - "mongo"
+      - "mongo-express"
     ports:
       - "80:80"
     restart: always
