@@ -30,8 +30,9 @@ services:
     depends_on:
       - "mongo"
 
-  static:
-    image: nginx:alpine
+  react:
+    build:
+      context: ./react
+      dockerfile: Dockerfile
     volumes:
-      - ./front_page_v1.1/build:/usr/share/nginx/html
-      - ./static:/etc/nginx/conf.d
+      - ./react:/app
