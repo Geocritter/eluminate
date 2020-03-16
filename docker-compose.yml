@@ -36,3 +36,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./react:/app
+
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    volumes:
+      - ./user:/appsrc
+    command: tail -f /dev/null
