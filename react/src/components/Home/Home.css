@@ -35,5 +35,14 @@
 }
 
 .App-foot {
-    padding-bottom: 40%;
+    padding-top: 10%;
+}
+
+.background {
+    height: 100%;
+}
+
+.li {
+    list-style-type: none;
+    text-align: center;
 }

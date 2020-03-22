@@ -8,6 +8,7 @@ import About from './components/About/About';
 import Contact from './components/Contact/Contact';
 import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
+import Apitest from './components/Apitest/Apitest';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path='/' exact component={Home} />
                     <Route path='/about' component={About} />
                     <Route path='/contact' component={Contact} />
+                    <Route path='/api' component={Apitest} />
                 </Switch>
                 <Footer/>
             </Router>
