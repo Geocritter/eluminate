@@ -33,10 +33,6 @@ class Home extends React.Component {
                 <h1>{"\n"}</h1>
 
                 <Grid container justify="center">
-                    <Api
-                        jsonList={this.handleState.bind(this)} />
-                </Grid>
-                <Grid container justify="center">
                     <ul className="li">
                         <li key={items.greeting}>
                             {items.greeting}
