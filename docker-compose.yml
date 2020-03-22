@@ -43,4 +43,4 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./user:/appsrc
-    command: tail -f /dev/null
+    #command: tail -f /dev/null
