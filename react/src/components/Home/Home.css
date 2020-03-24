@@ -1,14 +1,12 @@
 .App-header {
-  background-color: #f5f3f3;
-  display: flex;
-  flex-direction: column;
-  padding-top: 2%;
-  font-size: calc(5px + 2vmin);
-  color: rgb(0, 0, 0);
-  font-family: "Rockwell";
-}
+    flex-direction: column;
+    padding-top: 2%;
+    font-size: calc(5px + 2vmin);
+    color: rgb(0, 0, 0);
+    font-family: "Rockwell";
+  }
 
-.App-logo {
+  .App-logo {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -35,14 +33,5 @@
 }
 
 .App-foot {
-    padding-top: 60%;
-}
-
-.background {
-    height: 100%;
-}
-
-.li {
-    list-style-type: none;
-    text-align: center;
+    position: relative bottom -10px;
 }

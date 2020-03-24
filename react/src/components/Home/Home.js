@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Api from '../Apitest/Apitest';
+import Footer from '../Footer/Footer';
 
 class Home extends React.Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class Home extends React.Component {
     render() {
         var items = this.state.items;
         return (
-            <div className="background">
+            <div>
                 <h1 className="App-sub"> Understand your clients </h1>
                 <p className="App-body">
                     Learn what matters to your customer without needing to be a research expert</p>
@@ -30,19 +31,10 @@ class Home extends React.Component {
                         <Button style={{ background: '#e6e6e4' }}> Learn More </Button>
                     </Grid>
                 </Link>
-                <h1>{"\n"}</h1>
-
                 <Grid container justify="center">
-                    <ul className="li">
-                        <li key={items.greeting}>
-                            {items.greeting}
-                        </li>
-                    </ul>
+                    <Footer />
                 </Grid>
-
-
-                <p className="App-foot" />
-            </div>
+            </div >
         )
     }
 
