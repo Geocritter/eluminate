@@ -13,7 +13,7 @@ import Background from './Pictures/yellow.png';
 import Background2 from './Pictures/man_interview.jpg';
 import Lumi from './Pictures/Lumi.png';
 import Arrow from './Pictures/arrow_down.png';
-import Pagedown from './Pictures/page_arrow.png'
+import Pagedown from './Pictures/down-arrow_notext.png'
 
 const imageurl = window.innerWidth >= 950 ? Background2 : Background;
 
@@ -55,7 +55,9 @@ class Home extends React.Component {
                     <h1 className="title" > eLuminate </h1>
                     <h1 className="App-sub4"> Making interviews easy </h1>
                     <Grid container justify="center">
-                        <img className="img2" src={Pagedown}></img>
+                        <Fade>
+                            <img className="img2" src={Pagedown}></img>
+                        </Fade>
                     </Grid>
                 </section>
                 <section style={sectionStyle1} className="child">
