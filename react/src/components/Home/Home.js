@@ -53,7 +53,7 @@ class Home extends React.Component {
             <div className="container">
                 <section style={sectionStyle3}>
                     <h1 className="title" > eLuminate </h1>
-                    <h1 className="App-sub4"> Making interviews easy </h1>
+                    <h1 className="App-sub4"> Interviews made easy </h1>
                     <Grid container justify="center">
                         <Fade>
                             <img className="img2" src={Pagedown}></img>
