@@ -82,13 +82,13 @@ class Home extends React.Component {
                         </Fade>
                         <Fade top>
                             <Grid container justify="center" className={classes.root}>
-                                <Paper test={"Finds follow-up questions to dig deeper"} />
+                                <Paper test={"Digs deeper for follow-up questions"} />
                             </Grid>
                             <img className="img" src={Arrow} />
                         </Fade>
                         <Fade top>
                             <Grid container justify="center" className={classes.root}>
-                                <Paper test={"Finds reliable facts and real stories"} />
+                                <Paper test={"Discover reliable facts and real stories"} />
                             </Grid>
                             <img className="img" src={Arrow} />
                         </Fade>

@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap');
+
+
 .App-header {
     flex-direction: column;
     font-size: calc(5px + 2vmin);
     color: rgb(0, 0, 0);
-    font-family: "Rockwell";
+    font-family: 'Raleway', sans-serif;
 }
 
   .App-logo {
@@ -19,7 +22,7 @@
     flex-direction: column;
     padding-top: 12%;
     font-size: calc(35px + 2vmin);
-    font-family: "Rockwell-Bold";
+    font-family: 'Raleway', sans-serif;
     color: #222228;
     text-align: center;
 }
@@ -30,7 +33,7 @@
     padding-top: 10%;
     padding-right: 23%;
     font-size: calc(35px + 2vmin);
-    font-family: "Rockwell-Bold";
+    font-family: 'Raleway', sans-serif;
     color: #222228;
     text-align: center;
     white-space: pre-wrap;
@@ -39,7 +42,7 @@
     display: flex;
     flex-direction: column;
     padding-top: 6%;
-    font-family: "Rockwell-Bold";
+    font-family: 'Raleway', sans-serif;
     color: #222228;
     text-align: center;
     font-size: calc(10px + 2vmin);
@@ -50,7 +53,7 @@
     display: flex;
     flex-direction: column;
     font-size: calc(25px + 2vmin);
-    font-family: "Rockwell-Bold";
+    font-family: 'Raleway', sans-serif;
     color: #222228;
     text-align: center;
     margin-top: 2%;
@@ -58,7 +61,7 @@
 
 .App-body {
     text-align: center;
-    font-family: 'Rockwell';
+    font-family: 'Raleway', sans-serif;
     color: #000000;
 }
 
