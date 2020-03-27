@@ -11,7 +11,7 @@ import Apitest from './components/Apitest/Apitest';
 
 function App() {
     return (
-        <div className="App-header">
+        <div>
             <Router>
                 <Appbar />
                 <Switch>

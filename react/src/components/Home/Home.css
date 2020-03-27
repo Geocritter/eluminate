@@ -1,10 +1,9 @@
 .App-header {
     flex-direction: column;
-    padding-top: 2%;
     font-size: calc(5px + 2vmin);
     color: rgb(0, 0, 0);
     font-family: "Rockwell";
-  }
+}
 
   .App-logo {
     display: block;
@@ -18,20 +17,85 @@
 .App-sub {
     display: flex;
     flex-direction: column;
-    padding-top: 10%;
+    padding-top: 12%;
     font-size: calc(35px + 2vmin);
     font-family: "Rockwell-Bold";
     color: #222228;
     text-align: center;
 }
 
+.App-sub2 {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10%;
+    padding-right: 23%;
+    font-size: calc(35px + 2vmin);
+    font-family: "Rockwell-Bold";
+    color: #222228;
+    text-align: center;
+    white-space: pre-wrap;
+}
+.App-sub3 {
+    display: flex;
+    flex-direction: column;
+    padding-top: 6%;
+    font-family: "Rockwell-Bold";
+    color: #222228;
+    text-align: center;
+    font-size: calc(10px + 2vmin);
+    white-space: pre-wrap;
+    padding-bottom: 2%;
+}
+.App-sub4 {
+    display: flex;
+    flex-direction: column;
+    font-size: calc(25px + 2vmin);
+    font-family: "Rockwell-Bold";
+    color: #222228;
+    text-align: center;
+    margin-top: 2%;
+}
+
 .App-body {
     text-align: center;
     font-family: 'Rockwell';
     color: #000000;
-    font-size: calc(10px + 2vmin);
 }
 
-.App-foot {
-    position: relative bottom -10px;
+html {
+    scroll-snap-type: y proximity;
+}
+  
+.child {
+    scroll-snap-align: start;
+}
+
+.inlinetxt {
+    display: inline-block;
+    text-align: center;
+}
+
+.img {
+    height: 30%;
+    width: 3%;
+}
+
+.img2 {
+    height: 5%;
+    width: 2.5%;
+    position: absolute;
+    bottom: 0;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    padding-top: 15%;
+    font-size: calc(35px + 7vmin);
+    font-family: "Roboto";
+    color: #222228;
+    text-align: center;
+    white-space: pre-wrap;
+    margin-bottom: 0%;
+    margin-top: 0;
 }

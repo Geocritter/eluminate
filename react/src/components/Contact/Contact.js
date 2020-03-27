@@ -62,6 +62,8 @@ class Contact extends React.Component {
 
     handleClick() {
         const url = "http://" + window.location.host + "/api/user/register"
+        alert("Thanks for your submission!")
+        
         console.log(this.state.Fname)
         console.log(this.state.Lname)
         console.log(this.state.Email)
@@ -75,7 +77,6 @@ class Contact extends React.Component {
             },
             body: JSON.stringify(this.state)
         })
-
     }
 
     render() {
