@@ -30,8 +30,6 @@
 .App-sub2 {
     display: flex;
     flex-direction: column;
-    padding-top: 10%;
-    padding-right: 23%;
     font-size: calc(35px + 2vmin);
     font-family: 'Raleway', sans-serif;
     color: #222228;

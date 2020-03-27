@@ -26,10 +26,10 @@ class Contact extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Fname: 'he1',
-            Lname: 'he2',
-            Email: '',
-            Reason: ''
+            Fname: 'he',
+            Lname: 'he',
+            Email: 'x',
+            Reason: 'd'
         };
         this.FhandleChange = this.FhandleChange.bind(this);
         this.LhandleChange = this.LhandleChange.bind(this);
