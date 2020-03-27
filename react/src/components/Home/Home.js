@@ -32,14 +32,14 @@ var sectionStyle3 = {
     backgroundImage: `url(${Background})`
 }
 
-const styles = theme => ({
+const styles = {
     root: {
         height: 60,
     },
     container: {
         display: 'flex',
     },
-});
+};
 
 class Home extends React.Component {
 
