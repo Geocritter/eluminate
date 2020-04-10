@@ -12,6 +12,10 @@ RUN npm install react-scripts -g
 
 RUN npm install @material-ui/core -g
 RUN npm install @material-ui/styles -g
+RUN npm install react-reveal --save
+RUN npm install react-mic --save
+
+
 
 EXPOSE 3000
 CMD ["npm", "start"]

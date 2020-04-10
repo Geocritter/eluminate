@@ -8,6 +8,7 @@ import About from './components/About/About';
 import Contact from './components/Contact/Contact';
 import Home from './components/Home/Home';
 import Apitest from './components/Apitest/Apitest';
+import Audioin from './components/Audio/Audio'
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Switch>
                     <Route path='/' exact component={Home} />
                     <Route path='/about' component={About} />
+                    <Route path='/audio' component={Audioin} />
                     <Route path='/contact' component={Contact} />
                     <Route path='/api' component={Apitest} />
                 </Switch>

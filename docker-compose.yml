@@ -9,6 +9,7 @@ services:
       - "mongo-express"
     ports:
       - "80:80"
+      - "443:443"
     restart: always
   
   mongo:
@@ -44,3 +45,12 @@ services:
     volumes:
       - ./user:/appsrc
     #command: tail -f /dev/null
+
+  stream:
+    build:
+      context: ./stream
+      dockerfile: Dockerfile
+    volumes:
+      - ./stream:/appsrc
+      - ./stream/config:/config
+    command: tail -f /dev/null

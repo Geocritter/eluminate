@@ -6,6 +6,7 @@ import Logo from './logo.png';
 import "./Appbar.css";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 
 const styles = {
@@ -21,6 +22,9 @@ const styles = {
     hide: {
         transform: 'translateY(-110%)',
         transition: 'transform 0.5s',
+    },
+    button: {
+        
     },
 };
 
@@ -87,7 +91,6 @@ class NavBar extends React.PureComponent {
                             style={{ cursor: 'pointer' }}
                             src={Logo} alt="logo" height="40px" width="160px" />
                     </Link>
-
                 </Toolbar>
             </AppBar>
         );

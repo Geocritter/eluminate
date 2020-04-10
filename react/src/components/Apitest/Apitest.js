@@ -1,41 +1,26 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { Component } from "react";
+import "./Apitest.css";
+import { connect, sendMsg } from "../Audio/index";
 
-export default class App extends React.Component {
-
+class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isLoaded: false,
-            items: [],
-        }
+        connect();
     }
 
-    componentDidMount() {
-        const url = "http://" + window.location.host + "/api/user/hello"
-        console.log(url)
-        fetch(url)
-            .then(res => res.json())
-            .then(json => {
-                this.setState({
-                    isLoaded: true,
-                    items: json,
-                })
-            })
-    }
+    send() {
+        console.log("hello");
+        sendMsg("hello");
 
-    handleClick() {
-        var jsonItems = this.state.items;
-        console.log(jsonItems)
-        this.props.jsonList(jsonItems);
     }
 
     render() {
         return (
-            <div className="style">
-                <Button style={{ background: '#FF0000' }} onClick={this.handleClick.bind(this)} >
-                    Test </Button>
+            <div className="App">
+                <button onClick={this.send}>Hit</button>
             </div>
-        )
+        );
     }
 }
+
+export default App;

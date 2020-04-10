@@ -15,6 +15,7 @@ import Lumi from './Pictures/Lumi.png';
 import Arrow from './Pictures/arrow_down.png';
 import Pagedown from './Pictures/down-arrow_notext.png'
 
+
 const imageurl = window.innerWidth >= 950 ? Background2 : Background;
 
 var sectionStyle1 = {
@@ -48,6 +49,7 @@ class Home extends React.Component {
     }
 
     render() {
+        console.log(navigator.mediaDevices)
         const { classes } = this.props;
         return (
             <div className="container">
