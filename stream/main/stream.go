@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -85,20 +84,16 @@ func reader(conn *websocket.Conn) {
 		//unmarshal data from socket to json
 		err2 := json.Unmarshal(p, &Obj)
 		if err2 != nil {
-			//write-to-file
-			if err3 := ioutil.WriteFile("/config/test.ogg", p, 0644); err3 != nil {
-				log.Fatal(err3)
-			}
+
 			//save last-recieved metaobject
 			sObj.Session = Obj.Session
 			sObj.StopTime = Obj.StopTime
 			sObj.Blob = p
 			go saveToDb(sObj)
 			//send to google
-			go transcript(Obj)
+			go transcript(Obj, p)
 
 		}
-		fmt.Println(Obj)
 
 	}
 }
@@ -109,11 +104,9 @@ func saveToDb(Obj saveObj) {
 	if _, err := collection.InsertOne(ctx, Obj); err != nil {
 		log.Println(err)
 	}
-	log.Println(Obj)
 }
 
-func transcript(Obj blobObj) {
-	log.Println("transcript: LIVE")
+func transcript(Obj blobObj, p []byte) {
 	ctx := context.Background()
 
 	// Creates a client.
@@ -121,11 +114,7 @@ func transcript(Obj blobObj) {
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	// Reads the audio file into memory.
-	data, err := ioutil.ReadFile("/config/test.ogg")
-	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
-	}
+
 	// Detects speech in the audio file.
 	resp, err := gClient.Recognize(ctx, &speechpb.RecognizeRequest{
 		Config: &speechpb.RecognitionConfig{
@@ -134,24 +123,22 @@ func transcript(Obj blobObj) {
 			LanguageCode:    "en-CA",
 		},
 		Audio: &speechpb.RecognitionAudio{
-			AudioSource: &speechpb.RecognitionAudio_Content{Content: data},
+			AudioSource: &speechpb.RecognitionAudio_Content{Content: p},
 		},
 	})
 	if err != nil {
 		log.Fatalf("failed to recognize: %v", err)
 	}
-	// Prints the results.
+	// Save the results.
 	for _, result := range resp.Results {
 		for _, alt := range result.Alternatives {
-			fmt.Println("recieved message")
+			fmt.Println(alt.Transcript)
 			collection := client.Database("Lumi").Collection("transcript")
 			ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 			filter := bson.D{{"session", Obj.Session}, {"stopTime", Obj.StopTime}}
 			updateData := bson.D{
 				{"$set", bson.D{{"gTranscript", alt.Transcript}}}}
-			result := collection.FindOneAndUpdate(ctx, filter, updateData)
-			log.Println(result.Err())
-			//c1 <- alt.Transcript
+			_ = collection.FindOneAndUpdate(ctx, filter, updateData)
 		}
 	}
 

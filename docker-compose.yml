@@ -54,3 +54,5 @@ services:
       - ./stream:/appsrc
       - ./stream/config:/config
     command: tail -f /dev/null
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /config/eLuminate-f781d432e057.json
