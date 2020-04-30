@@ -2,17 +2,36 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	speech "cloud.google.com/go/speech/apiv1"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	speechpb "google.golang.org/genproto/googleapis/cloud/speech/v1"
 )
+
+var c1 = make(chan string)
+var client *mongo.Client
+
+type blobObj struct {
+	Session  string `json:"session"`
+	StopTime int64  `json:"stopTime"`
+}
+
+type saveObj struct {
+	Session  string `json:"session" bson:"session"`
+	StopTime int64  `json:"stopTime" bson:"stopTime"`
+	Blob     []byte `bson:"blob"`
+}
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -32,6 +51,9 @@ func main() {
 		handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS", "HEAD"}),
 	)
 	rru.HandleFunc("/hello", sendTest).Methods("GET")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	clientOptions := options.Client().ApplyURI("mongodb://dev:dev@mongo:27017")
+	client, _ = mongo.Connect(ctx, clientOptions)
 	log.Fatal(http.ListenAndServe(":8092", cors(rru)))
 }
 
@@ -50,75 +72,87 @@ func sendTest(w http.ResponseWriter, r *http.Request) {
 }
 
 func reader(conn *websocket.Conn) {
+	//initialize structures
+	var Obj blobObj
+	var sObj saveObj
 	for {
-		/*for {
-			// read in a message
-			messageType, p, err := conn.ReadMessage()
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			// print out that message for clarity
-
-			fmt.Printf("%T, %#v\n", p, p)
-
-			if err := conn.WriteMessage(messageType, p); err != nil {
-				log.Println(err)
-				return
-			}
-
-		}*/
-		// read in a message
-
-		ctx := context.Background()
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
+		//read websocket
+		_, p, err1 := conn.ReadMessage()
+		if err1 != nil {
+			log.Println(err1)
 			return
 		}
-		if err := ioutil.WriteFile("/config/test.ogg", p, 0644); err != nil {
-			log.Fatal(err)
-		}
-		// Creates a client.
-		client, err := speech.NewClient(ctx)
-		if err != nil {
-			log.Fatalf("Failed to create client: %v", err)
-		}
-		log.Println("client created")
-
-		// Sets the name of the audio file to transcribe.
-		//audio := "/config/recording.ogg"
-		// Reads the audio file into memory.
-
-		data, err := ioutil.ReadFile("/config/test.ogg")
-		if err != nil {
-			log.Fatalf("Failed to read file: %v", err)
-		}
-		// Detects speech in the audio file.
-		resp, err := client.Recognize(ctx, &speechpb.RecognizeRequest{
-			Config: &speechpb.RecognitionConfig{
-				Encoding:        speechpb.RecognitionConfig_OGG_OPUS,
-				SampleRateHertz: 48000,
-				LanguageCode:    "zh",
-			},
-			Audio: &speechpb.RecognitionAudio{
-				AudioSource: &speechpb.RecognitionAudio_Content{Content: data},
-			},
-		})
-		log.Println(resp.Results)
-		if err != nil {
-			log.Fatalf("failed to recognize: %v", err)
-		}
-
-		// Prints the results.
-		for _, result := range resp.Results {
-			for _, alt := range result.Alternatives {
-				fmt.Printf("\"%v\" (confidence=%3f)\n", alt.Transcript, alt.Confidence)
+		//unmarshal data from socket to json
+		err2 := json.Unmarshal(p, &Obj)
+		if err2 != nil {
+			//write-to-file
+			if err3 := ioutil.WriteFile("/config/test.ogg", p, 0644); err3 != nil {
+				log.Fatal(err3)
 			}
+			//save last-recieved metaobject
+			sObj.Session = Obj.Session
+			sObj.StopTime = Obj.StopTime
+			sObj.Blob = p
+			go saveToDb(sObj)
+			//send to google
+			go transcript(Obj)
+
 		}
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
+		fmt.Println(Obj)
+
+	}
+}
+
+func saveToDb(Obj saveObj) {
+	collection := client.Database("Lumi").Collection("transcript")
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	if _, err := collection.InsertOne(ctx, Obj); err != nil {
+		log.Println(err)
+	}
+	log.Println(Obj)
+}
+
+func transcript(Obj blobObj) {
+	log.Println("transcript: LIVE")
+	ctx := context.Background()
+
+	// Creates a client.
+	gClient, err := speech.NewClient(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+	// Reads the audio file into memory.
+	data, err := ioutil.ReadFile("/config/test.ogg")
+	if err != nil {
+		log.Fatalf("Failed to read file: %v", err)
+	}
+	// Detects speech in the audio file.
+	resp, err := gClient.Recognize(ctx, &speechpb.RecognizeRequest{
+		Config: &speechpb.RecognitionConfig{
+			Encoding:        speechpb.RecognitionConfig_OGG_OPUS,
+			SampleRateHertz: 48000,
+			LanguageCode:    "en-CA",
+		},
+		Audio: &speechpb.RecognitionAudio{
+			AudioSource: &speechpb.RecognitionAudio_Content{Content: data},
+		},
+	})
+	if err != nil {
+		log.Fatalf("failed to recognize: %v", err)
+	}
+	// Prints the results.
+	for _, result := range resp.Results {
+		for _, alt := range result.Alternatives {
+			fmt.Println("recieved message")
+			collection := client.Database("Lumi").Collection("transcript")
+			ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+			filter := bson.D{{"session", Obj.Session}, {"stopTime", Obj.StopTime}}
+			updateData := bson.D{
+				{"$set", bson.D{{"gTranscript", alt.Transcript}}}}
+			result := collection.FindOneAndUpdate(ctx, filter, updateData)
+			log.Println(result.Err())
+			//c1 <- alt.Transcript
 		}
 	}
+
 }

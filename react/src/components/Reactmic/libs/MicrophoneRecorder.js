@@ -4,6 +4,8 @@ let analyser
 let audioCtx
 let mediaRecorder
 let chunks = []
+let name = "Tony"
+let session = name + Date.now() + Math.floor(Math.random() * 100)
 let startTime
 let stream
 let mediaOptions
@@ -58,7 +60,7 @@ export class MicrophoneRecorder {
             }
 
             if (audioCtx && mediaRecorder && mediaRecorder.state === 'inactive') {
-                mediaRecorder.start(250)
+                mediaRecorder.start()
                 const source = audioCtx.createMediaStreamSource(stream)
                 source.connect(analyser)
                 if (onStartCallback) { onStartCallback() }
@@ -80,29 +82,34 @@ export class MicrophoneRecorder {
 
                     mediaRecorder.onstop = this.onStop
                     mediaRecorder.ondataavailable = (event) => {
-                        console.log(event.data)
                         var data = event.data
                         const test = {
                             data,
                             stopTime: Date.now(),
                         }
                         chunks.push(test.data)
-                        if (onDataCallback) {
-                            onDataCallback(test)
-                        }
+
                     }
 
                     audioCtx = AudioContext.getAudioContext()
                     audioCtx.resume().then(() => {
                         analyser = AudioContext.getAnalyser()
                         console.log(audioCtx.sampleRate)
-                        mediaRecorder.start(250)
+                        mediaRecorder.start()
                         const sourceNode = audioCtx.createMediaStreamSource(stream)
                         sourceNode.connect(analyser)
                     })
+
                 })
         } else {
             alert('Your browser does not support audio recording')
+        }
+    }
+
+    pulse() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop()
+
         }
     }
 
@@ -123,14 +130,16 @@ export class MicrophoneRecorder {
         chunks = []
 
         const blobObject = {
-            blob,
-            startTime,
-            stopTime: Date.now(),
-            options: mediaOptions,
-            blobURL: window.URL.createObjectURL(blob)
+            "metadata": {
+                "session": session,
+                "stopTime": Date.now(),
+            },
+            "blob": blob,
+            
         }
 
         if (onStopCallback) { onStopCallback(blobObject) }
         if (onSaveCallback) { onSaveCallback(blobObject) }
     }
+
 }

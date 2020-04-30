@@ -17,28 +17,18 @@ class Example extends React.Component {
     }
 
     startRecording = () => {
-        this.setState({ record: true });
+        this.setState({ record: true })
     }
 
     stopRecording = () => {
         this.setState({ record: false });
     }
 
-    onData(recordedBlob) {
-        console.log('chunk of real-time data is: ', recordedBlob.data);
-        //sendMsg(recordedBlob.data)
-    }
-
     onStop = (recordedBlob) => {
         this.setState({ blobURL: recordedBlob.blobURL })
-        console.log('recordedBlob is: ', recordedBlob);
+        console.log(recordedBlob)
+        sendMsg(JSON.stringify(recordedBlob.metadata))
         sendMsg(recordedBlob.blob)
-    }
-
-    onSave = (blobObject) => {
-        this.setState({
-            downloadLinkURL: blobObject.blobURL
-        })
     }
 
     render() {
@@ -51,7 +41,6 @@ class Example extends React.Component {
                         className="sound-wave"
                         onStop={this.onStop}
                         onData={this.onData}
-                        onSave={this.onSave}
                         strokeColor="#e6e6e4"
                         backgroundColor="#171640" />
                     <button onClick={this.startRecording} type="button">Start</button>
@@ -62,10 +51,7 @@ class Example extends React.Component {
                         <audio ref="audioSource" src={blobURL} controls play />
                     </Grid>
                 </div>
-                <a
-                    href={downloadLinkURL}
-                    download={`recording2`}
-                >download</a>
+                
             </div>
         );
     }
