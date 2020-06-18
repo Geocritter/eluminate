@@ -77,28 +77,10 @@ export class MicrophoneRecorder {
                     } else {
                         mediaRecorder = new MediaRecorder(str)
                     }
-
                     if (onStartCallback) { onStartCallback() }
-
                     mediaRecorder.onstop = this.onStop
-                    mediaRecorder.ondataavailable = (event) => {
-                        var data = event.data
-                        const test = {
-                            data,
-                            stopTime: Date.now(),
-                        }
-                        chunks.push(test.data)
 
-                    }
-
-                    audioCtx = AudioContext.getAudioContext()
-                    audioCtx.resume().then(() => {
-                        analyser = AudioContext.getAnalyser()
-                        console.log(audioCtx.sampleRate)
-                        mediaRecorder.start()
-                        const sourceNode = audioCtx.createMediaStreamSource(stream)
-                        sourceNode.connect(analyser)
-                    })
+                    this.detectSilence(stream, this.onSilence, this.onSpeak)
 
                 })
         } else {
@@ -106,10 +88,25 @@ export class MicrophoneRecorder {
         }
     }
 
+    onSilence() {
+        console.log("silence")
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop()
+            
+        }
+    }
+    onSpeak() {
+        console.log("speaking")
+        mediaRecorder.ondataavailable = (event) => {
+            var data = event.data
+            console.log(data)
+            chunks.push(data)
+        }
+    }
+
     pulse() {
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop()
-
         }
     }
 
@@ -135,11 +132,54 @@ export class MicrophoneRecorder {
                 "stopTime": Date.now(),
             },
             "blob": blob,
-            
         }
 
         if (onStopCallback) { onStopCallback(blobObject) }
         if (onSaveCallback) { onSaveCallback(blobObject) }
     }
+
+    detectSilence(
+        stream,
+        onSoundEnd = _ => { },
+        onSoundStart = _ => { },
+        silence_delay = 100,
+        min_decibels = -50
+    ) {
+        console.log(mediaRecorder.state)
+        const ctx = AudioContext.getAudioContext()
+        const analyser = AudioContext.getAnalyser()
+        mediaRecorder.start()
+        const streamNode = ctx.createMediaStreamSource(stream);
+        streamNode.connect(analyser);
+        analyser.minDecibels = min_decibels;
+
+        const data = new Uint8Array(analyser.frequencyBinCount); // will hold our data
+        let silence_start = performance.now();
+        let triggered = true; // trigger only once per silence event
+        console.log("starting silence detection")
+        function loop(time) {
+            requestAnimationFrame(loop); // we'll loop every 60th of a second to check
+            analyser.getByteFrequencyData(data); // get current data
+            if (ctx && mediaRecorder && mediaRecorder.state === 'inactive') {
+                console.log("restarting...")
+                mediaRecorder.start()
+                const streamNode = ctx.createMediaStreamSource(stream)
+                streamNode.connect(analyser)
+                if (onStartCallback) { onStartCallback() }}
+            if (data.some(v => v)) { // if there is data above the given db limit
+                if (triggered) {
+                    triggered = false;
+                    onSoundStart();
+                }
+                silence_start = time; // set it to now
+            }
+            if (!triggered && time - silence_start > silence_delay) {
+                onSoundEnd();
+                triggered = true;
+            }
+        }
+        loop();
+    }
+
 
 }

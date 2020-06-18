@@ -106,13 +106,8 @@ export default class ReactMic extends Component {
         } = this.props
         const { microphoneRecorder, canvasCtx } = this.state
         if (record && this.state.changeRec) {
-            if (microphoneRecorder) {
-                microphoneRecorder.startRecording()
-                setTimeout(function () {
-                    microphoneRecorder.pulse(onStop)
-                }, 3000);
-            }
-        } 
+            microphoneRecorder.startRecording()
+        }
         else if (microphoneRecorder) {
             microphoneRecorder.stopRecording(onStop)
             this.clear()
